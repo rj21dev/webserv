@@ -16,7 +16,7 @@ Server::~Server() {
 void	Server::initListenSocket() {
 	listenFd = socket(AF_INET, SOCK_STREAM, 0);
 	if (listenFd < 0) {
-		std::cerr << "socket() failure" << std::endl;
+		std::cerr << "Socket: " << strerror(errno) << std::endl;
 		exit(EXIT_FAILURE);
 	}
 	std::cout << "Listening socket created..." << std::endl;
@@ -24,7 +24,7 @@ void	Server::initListenSocket() {
 
 void	Server::makeBind() {
 	if (bind(listenFd, (struct sockaddr *)&addr, sizeof(addr)) < 0) {
-		std::cerr << "bind() failure" << std::endl;
+		std::cerr << "Bind: " << strerror(errno) << std::endl;
 		exit(EXIT_FAILURE);
 	}
 	std::cout << "Binding... success" << std::endl;
@@ -32,7 +32,7 @@ void	Server::makeBind() {
 
 void	Server::makeListenQueue() {
 	if (listen(listenFd, QUEUE) < 0) {
-		std::cerr << "listen() failure" << std::endl;
+		std::cerr << "Listen: " << strerror(errno) << std::endl;
 		exit(EXIT_FAILURE);
 	}
 	std::cout << "Making queue of " << QUEUE << "... success" << std::endl;
@@ -48,7 +48,7 @@ void	Server::launch() {
 	while (true) {
 		int connectionFd = accept(listenFd, (struct sockaddr *)&addr, &addrlen);
 		if (connectionFd < 0) {
-			std::cerr << "accept() failure" << std::endl;
+			std::cerr << "Accept: " << strerror(errno) << std::endl;
 			exit(EXIT_FAILURE);
 		}
 		char buf[2048] = {0};
